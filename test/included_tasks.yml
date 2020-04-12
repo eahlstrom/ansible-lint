@@ -1,0 +1,7 @@
+---
+- name: included_tasks 1
+  debug: msg="included_tasks 1"
+
+- name: included_tasks 2
+  include_tasks:
+    file: included_tasks_also.yml

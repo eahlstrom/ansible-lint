@@ -51,3 +51,17 @@ class TestTaskIncludes(unittest.TestCase):
         runner = Runner(self.rules, filename, [], [], [])
         runner.run()
         self.assertEqual(len(runner.playbooks), 4)
+
+    def test_include_tasks_2_7_style(self):
+        filename = 'test/taskincludes_2_7_style.yml'
+        runner = Runner(self.rules, filename, [], [], [])
+        runner.run()
+        playbooks = runner.playbooks
+        self.assertEqual(len(playbooks), 3)
+
+        (fname, _) = next(x for x in playbooks if x[1] == 'playbook')
+        self.assertTrue(os.path.isfile(fname), "expected {} to exist".format(fname))
+
+        for x in playbooks:
+            if x[1] == 'tasks':
+                self.assertTrue(os.path.isfile(x[0]), "expected {} to exist".format(x[0]))

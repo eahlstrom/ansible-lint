@@ -1,0 +1,5 @@
+---
+- hosts: webservers
+  tasks:
+    - include_tasks:
+        file: included_tasks.yml

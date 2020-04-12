@@ -217,6 +217,9 @@ def play_children(basedir, item, parent_type, playbook_dir):
 
 
 def _include_children(basedir, k, v, parent_type):
+    if k in ('include_tasks', 'import_tasks') and type(v) is dict and 'file' in v:
+        v = v['file']
+
     # handle include: filename.yml tags=blah
     (command, args, kwargs) = tokenize("{0}: {1}".format(k, v))
 
@@ -232,6 +235,8 @@ def _taskshandlers_children(basedir, k, v, parent_type):
         if 'include' in th:
             append_children(th['include'], basedir, k, parent_type, results)
         elif 'include_tasks' in th:
+            if type(th['include_tasks']) is dict and 'file' in th['include_tasks']:
+                th['include_tasks'] = th['include_tasks']['file']
             append_children(th['include_tasks'], basedir, k, parent_type, results)
         elif 'import_playbook' in th:
             append_children(th['import_playbook'], basedir, k, parent_type, results)
